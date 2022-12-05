@@ -7,9 +7,10 @@
       "containerPorts": "1433:1433",
       "secretStore": "LocalSecretsFile",
       "containerName": "MacroMinderDB",
-      "containerImage": "mcr.microsoft.com/mssql/server:2022-latest",
+      "containerImage": "mcr.microsoft.com/mssql/server:2019-latest",
       "type": "mssql.container",
-      "connectionId": "ConnectionStrings:DefaultConnection"
+      "connectionId": "ConnectionStrings:DefaultConnection",
+      "dynamicId": null
     }
   }
 }
