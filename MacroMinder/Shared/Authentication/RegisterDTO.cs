@@ -1,13 +1,11 @@
-﻿namespace MacroMinder.Shared.Account;
+﻿namespace MacroMinder.Shared.Authentication;
 
-using JetBrains.Annotations;
 using System.ComponentModel.DataAnnotations;
 
-public class CreateAccountDTO
+public class RegisterDTO
 {
     [DataType(DataType.Password)]
     [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-    [UsedImplicitly]
     public required string ConfirmPassword { get; set; }
 
     [Required]
@@ -16,6 +14,5 @@ public class CreateAccountDTO
     public required string Password { get; set; }
 
     [Required]
-    [EmailAddress]
     public required string UserName { get; set; }
 }

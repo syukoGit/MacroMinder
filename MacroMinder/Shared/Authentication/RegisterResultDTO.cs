@@ -1,6 +1,6 @@
-﻿namespace MacroMinder.Shared.Account;
+﻿namespace MacroMinder.Shared.Authentication;
 
-public class CreateAccountResultDTO
+public class RegisterResultDTO
 {
     public IEnumerable<string>? Errors { get; set; }
 
