@@ -1,6 +1,6 @@
 ﻿namespace MacroMinder.Server.Controllers;
 
-using MacroMinder.Shared.Account;
+using MacroMinder.Shared.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +16,7 @@ public class AccountsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateAccountDTO model)
+    public async Task<IActionResult> Post([FromBody] RegisterDTO model)
     {
         IdentityUser newUser = new () { UserName = model.UserName };
 
@@ -26,9 +26,9 @@ public class AccountsController : ControllerBase
         {
             IEnumerable<string> errors = result.Errors.Select(static x => x.Description);
 
-            return Ok(new CreateAccountResultDTO { Successful = false, Errors = errors });
+            return Ok(new RegisterResultDTO { Successful = false, Errors = errors });
         }
 
-        return Ok(new CreateAccountResultDTO { Successful = true });
+        return Ok(new RegisterResultDTO { Successful = true });
     }
 }
