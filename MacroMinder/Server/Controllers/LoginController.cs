@@ -26,7 +26,7 @@ public class LoginController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginDTO login)
     {
-        SignInResult result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, false, false);
+        SignInResult result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, false, false);
 
         if (!result.Succeeded)
         {
@@ -39,7 +39,7 @@ public class LoginController : ControllerBase
 
         Claim[] claims =
         {
-            new (ClaimTypes.Name, login.UserName),
+            new (ClaimTypes.Name, login.Username),
         };
 
         SymmetricSecurityKey key = new (Encoding.UTF8.GetBytes(_configuration["Jwt.SecurityKey"] ?? string.Empty));

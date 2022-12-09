@@ -10,5 +10,5 @@ public class LoginDTO
     public bool RememberMe { get; set; }
 
     [Required]
-    public required string UserName { get; set; }
+    public required string Username { get; set; }
 }

@@ -49,7 +49,7 @@ public class AuthenticationService
 
         await _localStorage.SetItemAsync("authToken", loginResult.Token);
 
-        (_authenticationStateProvider as ApiAuthenticationStateProvider)?.MarkUserAsAuthenticated(loginModel.UserName);
+        (_authenticationStateProvider as ApiAuthenticationStateProvider)?.MarkUserAsAuthenticated(loginModel.Username);
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 
         return loginResult;
