@@ -30,10 +30,17 @@ public class LoginController : ControllerBase
 
         if (!result.Succeeded)
         {
-            return BadRequest(new LoginResultDTO { Successful = false, Error = "Username and password are invalid." });
+            return BadRequest(new LoginResultDTO
+            {
+                Successful = false,
+                Error = "Username and password are invalid.",
+            });
         }
 
-        Claim[] claims = { new (ClaimTypes.Name, login.UserName) };
+        Claim[] claims =
+        {
+            new (ClaimTypes.Name, login.UserName),
+        };
 
         SymmetricSecurityKey key = new (Encoding.UTF8.GetBytes(_configuration["Jwt.SecurityKey"] ?? string.Empty));
         SigningCredentials credentials = new (key, SecurityAlgorithms.HmacSha256);
@@ -41,6 +48,10 @@ public class LoginController : ControllerBase
 
         JwtSecurityToken token = new (_configuration["Jwt.Issuer"], _configuration["Jwt.Audience"], claims, expires: expiry, signingCredentials: credentials);
 
-        return Ok(new LoginResultDTO { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+        return Ok(new LoginResultDTO
+        {
+            Successful = true,
+            Token = new JwtSecurityTokenHandler().WriteToken(token),
+        });
     }
 }

@@ -35,7 +35,11 @@ public class AuthenticationService
 
         if (loginResult == null)
         {
-            return new LoginResultDTO { Successful = false, Error = $"Unable to deserialize the login result. Result = {loginResultStr}" };
+            return new LoginResultDTO
+            {
+                Successful = false,
+                Error = $"Unable to deserialize the login result. Result = {loginResultStr}",
+            };
         }
 
         if (!response.IsSuccessStatusCode)
@@ -64,11 +68,19 @@ public class AuthenticationService
 
         string strResult = await result.Content.ReadAsStringAsync();
 
-        RegisterResultDTO? registerResult = JsonSerializer.Deserialize<RegisterResultDTO>(strResult, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-        return registerResult ?? new RegisterResultDTO
+        RegisterResultDTO? registerResult = JsonSerializer.Deserialize<RegisterResultDTO>(strResult, new JsonSerializerOptions
         {
-            Successful = false, Errors = new[] { $"Unable to deserialize the register result. result = {strResult}" },
-        };
+            PropertyNameCaseInsensitive = true,
+        });
+
+        return registerResult
+            ?? new RegisterResultDTO
+               {
+                   Successful = false,
+                   Errors = new[]
+                   {
+                       $"Unable to deserialize the register result. result = {strResult}",
+                   },
+               };
     }
 }
