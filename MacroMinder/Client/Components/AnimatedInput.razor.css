@@ -1,0 +1,68 @@
+﻿.field {
+    color: white;
+    height: 52px;
+    min-width: 150px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.field input {
+    background-color: inherit;
+    border: none;
+    box-sizing: border-box;
+    color: white;
+    height: 100%;
+    line-height: 52px;
+    outline: 0;
+    padding-top: 25px;
+    position: absolute;
+    width: 100%;
+}
+
+.field label {
+    background-color: inherit;
+    border-bottom: 1px solid white;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+}
+
+.field label::after {
+    border-bottom: 3px solid #e28aff;
+    bottom: -1px;
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    transform: translateX(-100%);
+    transition: transform .2s ease;
+    width: 100%;
+}
+
+.field .label-text {
+    bottom: 5px;
+    left: 0;
+    position: absolute;
+    transition: all .2s ease;
+}
+
+.field input:focus + label .label-text, .field input:valid + label .label-text {
+    color: #e28aff;
+    font-size: 12px;
+    transform: translateY(-150%);
+}
+
+.field input:focus + label::after, .field input:valid + label::after { transform: translateX(0); }
+
+.errors {
+    background-color: rgb(251, 106, 106);
+    border-radius: 10px;
+    color: white;
+    font-size: 12px;
+}
+
+.errors li { margin-right: 15px; }
