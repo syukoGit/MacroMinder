@@ -32,12 +32,16 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         ClaimsIdentity claimsIdentity = new (ParseClaimsFromJwt(savedToken), "jwt");
         ClaimsPrincipal claims = new (claimsIdentity);
 
-        return new AuthenticationState(new ClaimsPrincipal());
+        return new AuthenticationState(claims);
     }
 
     public void MarkUserAsAuthenticated(string email)
     {
-        Claim[] claims = { new (ClaimTypes.Name, email) };
+        Claim[] claims =
+        {
+            new (ClaimTypes.Name, email),
+        };
+
         ClaimsIdentity claimsIdentity = new (claims, "apiAuth");
 
         ClaimsPrincipal authenticatedUser = new (claimsIdentity);
