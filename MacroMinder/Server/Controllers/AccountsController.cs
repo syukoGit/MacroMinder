@@ -18,7 +18,10 @@ public class AccountsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] RegisterDTO model)
     {
-        IdentityUser newUser = new () { UserName = model.UserName };
+        IdentityUser newUser = new ()
+        {
+            UserName = model.Username,
+        };
 
         IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
 
@@ -26,9 +29,16 @@ public class AccountsController : ControllerBase
         {
             IEnumerable<string> errors = result.Errors.Select(static x => x.Description);
 
-            return Ok(new RegisterResultDTO { Successful = false, Errors = errors });
+            return Ok(new RegisterResultDTO
+            {
+                Successful = false,
+                Errors = errors,
+            });
         }
 
-        return Ok(new RegisterResultDTO { Successful = true });
+        return Ok(new RegisterResultDTO
+        {
+            Successful = true,
+        });
     }
 }
