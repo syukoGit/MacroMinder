@@ -67,6 +67,10 @@
 
     private bool ButtonDisabled => HasErrors();
 
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
     private LoginDTO LoginDTO => new()
     {
         Username = _username ?? string.Empty,
@@ -84,7 +88,7 @@
 
             if (result.Successful)
             {
-                NavigationManager.NavigateTo("/");
+                NavigationManager.NavigateTo(ReturnUrl ?? "/");
             }
             else
             {
