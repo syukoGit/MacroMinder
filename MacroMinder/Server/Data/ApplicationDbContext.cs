@@ -4,11 +4,18 @@ using MacroMinder.Server.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-#pragma warning disable CS8618
 public class ApplicationDbContext : IdentityDbContext<User>
 {
     public ApplicationDbContext(DbContextOptions options)
         : base(options)
     {
+    }
+
+    /// <inheritdoc />
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<User>().Navigation(static c => c.Foods).AutoInclude();
+
+        base.OnModelCreating(builder);
     }
 }
