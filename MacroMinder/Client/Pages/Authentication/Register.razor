@@ -52,12 +52,10 @@
                                Required="true"
                                Text="Confirm password"/>
             </div>
-
-            <button id="submit"
-                    @onclick="@HandleRegistration"
-                    disabled="@ButtonDisabled">
-                Submit
-            </button>
+            
+            <AnimatedButton @onclick="@HandleRegistration"
+                            Disabled="@ButtonDisabled"
+                            Text="Register"/>
         </form>
     </div>
 </div>
@@ -86,6 +84,13 @@
         Password = _password ?? string.Empty,
         ConfirmPassword = _confirmPassword ?? string.Empty,
     };
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        ValidateUsername();
+        ValidatePassword();
+    }
 
     private async Task HandleRegistration()
     {
