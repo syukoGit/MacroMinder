@@ -1,5 +1,6 @@
 ﻿namespace MacroMinder.Server.Controllers;
 
+using MacroMinder.Server.Entities;
 using MacroMinder.Shared.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,11 @@ public class AuthenticationController : ControllerBase
 {
     private readonly IConfiguration _configuration;
 
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly SignInManager<User> _signInManager;
 
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<User> _userManager;
 
-    public AuthenticationController(IConfiguration configuration, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+    public AuthenticationController(IConfiguration configuration, SignInManager<User> signInManager, UserManager<User> userManager)
     {
         _configuration = configuration;
         _signInManager = signInManager;
@@ -61,7 +62,7 @@ public class AuthenticationController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Post([FromBody] RegisterDTO model)
     {
-        IdentityUser newUser = new ()
+        User newUser = new ()
         {
             UserName = model.Username,
         };
