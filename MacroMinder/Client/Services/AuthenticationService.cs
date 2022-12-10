@@ -27,7 +27,7 @@ public class AuthenticationService
     public async Task<LoginResultDTO> Login(LoginDTO loginModel)
     {
         string loginAsJson = JsonSerializer.Serialize(loginModel);
-        HttpResponseMessage response = await _httpClient.PostAsync("api/login", new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
+        HttpResponseMessage response = await _httpClient.PostAsync("api/Authentication/login", new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
 
         string loginResultStr = await response.Content.ReadAsStringAsync();
 
@@ -67,7 +67,7 @@ public class AuthenticationService
 
     public async Task<RegisterResultDTO> Register(RegisterDTO registerModel)
     {
-        HttpResponseMessage result = await _httpClient.PostAsJsonAsync("api/accounts", registerModel);
+        HttpResponseMessage result = await _httpClient.PostAsJsonAsync("api/Authentication/register", registerModel);
 
         string strResult = await result.Content.ReadAsStringAsync();
 
