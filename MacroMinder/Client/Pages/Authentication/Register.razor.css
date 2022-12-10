@@ -27,6 +27,24 @@ form {
 
 .form-group { width: 100%; }
 
+.login-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.login-box div {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-box div p { color: white; }
+
+.login-box div a { color: red; }
+
 .errors {
     background-color: rgb(251, 106, 106);
     border-radius: 10px;
