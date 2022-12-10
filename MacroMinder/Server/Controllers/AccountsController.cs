@@ -1,5 +1,6 @@
 ﻿namespace MacroMinder.Server.Controllers;
 
+using MacroMinder.Server.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 public class AccountsController : ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<User> _userManager;
 
-    public AccountsController(UserManager<IdentityUser> userManager)
+    public AccountsController(UserManager<User> userManager)
     {
         _userManager = userManager;
     }
