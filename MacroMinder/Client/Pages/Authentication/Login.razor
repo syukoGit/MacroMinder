@@ -43,12 +43,10 @@
                                Required="true"
                                Text="Password"/>
             </div>
-
-            <button id="submit"
-                    @onclick="@HandleLogin"
-                    disabled="@ButtonDisabled">
-                Submit
-            </button>
+            
+            <AnimatedButton @onclick="HandleLogin"
+                            Disabled="@ButtonDisabled"
+                            Text="Login"/>
         </form>
     </div>
 </div>
