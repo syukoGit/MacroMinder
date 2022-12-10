@@ -11,13 +11,13 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 [Route("api/[controller]")]
 [ApiController]
-public class LoginController : ControllerBase
+public class AuthenticationController : ControllerBase
 {
     private readonly IConfiguration _configuration;
 
     private readonly SignInManager<IdentityUser> _signInManager;
 
-    public LoginController(IConfiguration configuration, SignInManager<IdentityUser> signInManager)
+    public AuthenticationController(IConfiguration configuration, SignInManager<IdentityUser> signInManager)
     {
         _configuration = configuration;
         _signInManager = signInManager;
