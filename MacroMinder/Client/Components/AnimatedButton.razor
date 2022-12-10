@@ -1,0 +1,22 @@
+﻿<div class="button">
+    <a onclick="@(() => OnClick.InvokeAsync())"
+       disabled="@Disabled">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        @Text
+    </a>
+</div>
+
+@code {
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public string? Text { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
+}
