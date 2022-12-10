@@ -1,5 +1,14 @@
-﻿@inherits LayoutComponentBase
+﻿@using MacroMinder.Client.Components.Authentication
+@inherits LayoutComponentBase
 
-<main>
-    @Body
-</main>
+<div class="page">
+    <div class="top-row">
+        <p>MACRO MINDER</p>
+        <div>
+            <LoginDisplay/>
+        </div>
+    </div>
+    <main>
+        @Body
+    </main>
+</div>
