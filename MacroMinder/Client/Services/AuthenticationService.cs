@@ -31,7 +31,10 @@ public class AuthenticationService
 
         string loginResultStr = await response.Content.ReadAsStringAsync();
 
-        LoginResultDTO? loginResult = JsonSerializer.Deserialize<LoginResultDTO>(loginResultStr);
+        LoginResultDTO? loginResult = JsonSerializer.Deserialize<LoginResultDTO>(loginResultStr, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        });
 
         if (loginResult == null)
         {
