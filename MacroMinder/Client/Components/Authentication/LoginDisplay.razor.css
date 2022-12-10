@@ -1,0 +1,3 @@
+﻿.authorized { flex-direction: column; }
+
+.not-authorized { flex-direction: row }
