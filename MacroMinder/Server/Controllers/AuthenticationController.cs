@@ -11,19 +11,22 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 [Route("api/[controller]")]
 [ApiController]
-public class LoginController : ControllerBase
+public class AuthenticationController : ControllerBase
 {
     private readonly IConfiguration _configuration;
 
     private readonly SignInManager<IdentityUser> _signInManager;
 
-    public LoginController(IConfiguration configuration, SignInManager<IdentityUser> signInManager)
+    private readonly UserManager<IdentityUser> _userManager;
+
+    public AuthenticationController(IConfiguration configuration, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
     {
         _configuration = configuration;
         _signInManager = signInManager;
+        _userManager = userManager;
     }
 
-    [HttpPost]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO login)
     {
         SignInResult result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, false, false);
@@ -52,6 +55,33 @@ public class LoginController : ControllerBase
         {
             Successful = true,
             Token = new JwtSecurityTokenHandler().WriteToken(token),
+        });
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Post([FromBody] RegisterDTO model)
+    {
+        IdentityUser newUser = new ()
+        {
+            UserName = model.Username,
+        };
+
+        IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
+
+        if (!result.Succeeded)
+        {
+            IEnumerable<string> errors = result.Errors.Select(static x => x.Description);
+
+            return BadRequest(new RegisterResultDTO
+            {
+                Successful = false,
+                Errors = errors,
+            });
+        }
+
+        return Ok(new RegisterResultDTO
+        {
+            Successful = true,
         });
     }
 }
