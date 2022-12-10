@@ -44,9 +44,15 @@
                                Text="Password"/>
             </div>
             
-            <AnimatedButton @onclick="HandleLogin"
-                            Disabled="@ButtonDisabled"
-                            Text="Login"/>
+            <div class="login-box">
+                <AnimatedButton @onclick="HandleLogin"
+                                Disabled="@ButtonDisabled"
+                                Text="Login"/>
+                <div>
+                    <p>Don't have account ?</p>
+                    <a href="/authentication/register">Register</a>
+                </div>
+            </div>
         </form>
     </div>
 </div>

@@ -27,27 +27,23 @@ form {
 
 .form-group { width: 100%; }
 
-#submit {
-    background-color: #727984;
-    border-color: #00ff37;
-    color: #00ff37;
-    font-size: 16px;
-    letter-spacing: 4px;
-    margin-top: 40px;
-    overflow: hidden;
-    padding: 10px 20px;
-    position: relative;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: .5s;
+.login-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
 }
 
-#submit:hover {
-    background: #00ff37;
-    border-radius: 5px;
-    box-shadow: 0 0 10px #00ff37;
-    color: white;
+.login-box div {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
+
+.login-box div p { color: white; }
+
+.login-box div a { color: red; }
 
 .errors {
     background-color: rgb(251, 106, 106);
