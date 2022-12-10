@@ -42,11 +42,11 @@ public class LoginController : ControllerBase
             new (ClaimTypes.Name, login.Username),
         };
 
-        SymmetricSecurityKey key = new (Encoding.UTF8.GetBytes(_configuration["Jwt.SecurityKey"] ?? string.Empty));
+        SymmetricSecurityKey key = new (Encoding.UTF8.GetBytes(_configuration["Jwt:SecurityKey"] ?? string.Empty));
         SigningCredentials credentials = new (key, SecurityAlgorithms.HmacSha256);
-        DateTime expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["Jwt.ExpiryInDays"]));
+        DateTime expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["Jwt:ExpiryInDays"]));
 
-        JwtSecurityToken token = new (_configuration["Jwt.Issuer"], _configuration["Jwt.Audience"], claims, expires: expiry, signingCredentials: credentials);
+        JwtSecurityToken token = new (_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: expiry, signingCredentials: credentials);
 
         return Ok(new LoginResultDTO
         {
