@@ -1,0 +1,69 @@
+﻿<div class="container">
+    <div class="field">
+        <input autocomplete="off"
+               id="@_id"
+               @oninput="OnValueChanged"
+               required="@Required"
+               type="@InputType"
+               value="@_value"/>
+        <label for="@_id">
+            <span class="label-text">
+                @Text
+            </span>
+        </label>
+    </div>
+    @if (Errors != null && Errors.Any())
+    {
+        <ul class="errors">
+            @foreach (string error in Errors)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+
+    private string _id;
+
+    private string? _value;
+
+    public AnimatedInput()
+    {
+        _id = Guid.NewGuid().ToString();
+    }
+
+    [Parameter]
+    public IEnumerable<string>? Errors { get; set; }
+
+    [Parameter]
+    public string? InputType { get; set; }
+
+    [Parameter]
+    public bool Required { get; set; }
+
+    [Parameter]
+    public string? Text { get; set; }
+
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnInput { get; set; }
+
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        _value = e.Value?.ToString();
+
+        await ValueChanged.InvokeAsync(_value);
+        await OnInput.InvokeAsync(new ChangeEventArgs
+        {
+            Value = _value,
+        });
+    }
+
+}

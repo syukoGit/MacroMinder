@@ -1,0 +1,170 @@
+﻿@page "/authentication/register"
+
+@using MacroMinder.Client.Components
+@using MacroMinder.Client.Services
+@using MacroMinder.Shared.Authentication
+@using Microsoft.AspNetCore.Components
+@using System.ComponentModel.DataAnnotations
+
+@inject AuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <div id="form-border">
+        <form>
+            <h1 class="title">REGISTER</h1>
+
+            @if (_errors != null && _errors.Any())
+            {
+                <div class="errors">
+                    <p>Errors:</p>
+                    <ul>
+                        @foreach (string error in _errors)
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="form-group">
+                <AnimatedInput @bind-Value="_username"
+                               @oninput="ValidateUsername"
+                               Errors="_usernameErrors"
+                               Required="true"
+                               Text="Username"/>
+            </div>
+
+            <div class="form-group">
+                <AnimatedInput @bind-Value="_password"
+                               @oninput="ValidatePassword"
+                               Errors="_passwordErrors"
+                               InputType="password"
+                               Required="true"
+                               Text="Password"/>
+            </div>
+
+            <div class="form-group">
+                <AnimatedInput @bind-Value="_confirmPassword"
+                               @oninput="ValidatePassword"
+                               Errors="_confirmPasswordErrors"
+                               InputType="password"
+                               Required="true"
+                               Text="Confirm password"/>
+            </div>
+            
+            <AnimatedButton @onclick="@HandleRegistration"
+                            Disabled="@ButtonDisabled"
+                            Text="Register"/>
+        </form>
+    </div>
+</div>
+
+@code {
+
+    private string? _confirmPassword;
+
+    private IEnumerable<string>? _confirmPasswordErrors;
+
+    private IEnumerable<string>? _errors;
+
+    private string? _username;
+
+    private IEnumerable<string>? _usernameErrors;
+
+    private string? _password;
+
+    private IEnumerable<string>? _passwordErrors;
+
+    private bool ButtonDisabled => HasErrors();
+
+    private RegisterDTO RegisterDTO => new ()
+    {
+        Username = _username ?? string.Empty,
+        Password = _password ?? string.Empty,
+        ConfirmPassword = _confirmPassword ?? string.Empty,
+    };
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        ValidateUsername();
+        ValidatePassword();
+    }
+
+    private async Task HandleRegistration()
+    {
+        RegisterDTO registerDTO = RegisterDTO;
+
+        if (ValidateDTO(registerDTO, out ICollection<ValidationResult> validationResults))
+        {
+            RegisterResultDTO result = await AuthenticationService.Register(registerDTO);
+
+            if (result.Successful)
+            {
+                NavigationManager.NavigateTo("/authentication/login");
+            }
+            else
+            {
+                _errors = result.Errors;
+            }
+        }
+        else
+        {
+            _errors = validationResults.Select(static c => c.ErrorMessage ?? "Error");
+        }
+    }
+
+    private bool HasErrors()
+    {
+        return (_usernameErrors != null && _usernameErrors.Any()) || (_passwordErrors != null && _passwordErrors.Any()) || (_confirmPasswordErrors != null && _confirmPasswordErrors.Any());
+    }
+
+    private static bool ValidateDTO<T>(T instance, out ICollection<ValidationResult> results)
+    {
+        if (instance is null)
+        {
+            throw new ArgumentNullException(nameof(instance));
+        }
+
+        results = new List<ValidationResult>();
+
+        return Validator.TryValidateObject(instance, new ValidationContext(instance), results, true);
+    }
+
+    private void ValidatePassword()
+    {
+        RegisterDTO registerDTO = RegisterDTO;
+
+        _passwordErrors = !ValidateProperty(_password, registerDTO, "Password", out ICollection<ValidationResult> validationResults)
+                              ? validationResults.Select(static c => c.ErrorMessage ?? "Error")
+                              : null;
+
+        _confirmPasswordErrors = !ValidateProperty(_confirmPassword, registerDTO, "ConfirmPassword", out validationResults)
+                                     ? validationResults.Select(static c => c.ErrorMessage ?? "Error")
+                                     : null;
+    }
+
+    private static bool ValidateProperty<T>(object? value, T instance, string propertyName, out ICollection<ValidationResult> results)
+    {
+        if (instance is null)
+        {
+            throw new ArgumentNullException(nameof(instance));
+        }
+
+        results = new List<ValidationResult>();
+
+        return Validator.TryValidateProperty(value, new ValidationContext(instance)
+        {
+            MemberName = propertyName,
+        }, results);
+    }
+
+    private void ValidateUsername()
+    {
+        _usernameErrors = !ValidateProperty(_username, RegisterDTO, "Username", out ICollection<ValidationResult> validationResults)
+                              ? validationResults.Select(static c => c.ErrorMessage ?? "Error")
+                              : null;
+    }
+
+}

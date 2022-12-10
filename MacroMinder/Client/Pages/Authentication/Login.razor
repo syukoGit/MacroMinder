@@ -1,0 +1,147 @@
+﻿@page "/authentication/login"
+
+@using MacroMinder.Client.Components
+@using MacroMinder.Client.Services
+@using MacroMinder.Shared.Authentication
+@using Microsoft.AspNetCore.Components
+@using System.ComponentModel.DataAnnotations
+
+@inject AuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <div id="form-border">
+        <form>
+            <h1 class="title">LOGIN</h1>
+
+            @if (_errors != null && _errors.Any())
+            {
+                <div class="errors">
+                    <p>Errors:</p>
+                    <ul>
+                        @foreach (string error in _errors)
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="form-group">
+                <AnimatedInput @bind-Value="_username"
+                               @oninput="ValidateUsername"
+                               Errors="_usernameErrors"
+                               Required="true"
+                               Text="Username"/>
+            </div>
+
+            <div class="form-group">
+                <AnimatedInput @bind-Value="_password"
+                               @oninput="ValidatePassword"
+                               Errors="_passwordErrors"
+                               InputType="password"
+                               Required="true"
+                               Text="Password"/>
+            </div>
+            
+            <AnimatedButton @onclick="HandleLogin"
+                            Disabled="@ButtonDisabled"
+                            Text="Login"/>
+        </form>
+    </div>
+</div>
+
+@code {
+
+    private IEnumerable<string>? _errors;
+
+    private string? _username;
+
+    private IEnumerable<string>? _usernameErrors;
+
+    private string? _password;
+
+    private IEnumerable<string>? _passwordErrors;
+
+    private bool ButtonDisabled => HasErrors();
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    private LoginDTO LoginDTO => new()
+    {
+        Username = _username ?? string.Empty,
+        Password = _password ?? string.Empty,
+        RememberMe = false,
+    };
+
+    private async Task HandleLogin()
+    {
+        LoginDTO loginDTO = LoginDTO;
+
+        if (ValidateDTO(loginDTO, out ICollection<ValidationResult> validationResults))
+        {
+            LoginResultDTO result = await AuthenticationService.Login(loginDTO);
+
+            if (result.Successful)
+            {
+                NavigationManager.NavigateTo(ReturnUrl ?? "/");
+            }
+            else
+            {
+                _errors = new []{result.Error ?? "Error"};
+            }
+        }
+        else
+        {
+            _errors = validationResults.Select(static c => c.ErrorMessage ?? "Error");
+        }
+    }
+
+    private bool HasErrors()
+    {
+        return (_usernameErrors != null && _usernameErrors.Any()) || (_passwordErrors != null && _passwordErrors.Any());
+    }
+
+    private static bool ValidateDTO<T>(T instance, out ICollection<ValidationResult> results)
+    {
+        if (instance is null)
+        {
+            throw new ArgumentNullException(nameof(instance));
+        }
+
+        results = new List<ValidationResult>();
+
+        return Validator.TryValidateObject(instance, new ValidationContext(instance), results, true);
+    }
+
+    private void ValidatePassword()
+    {
+        _passwordErrors = !ValidateProperty(_password, LoginDTO, "Password", out ICollection<ValidationResult> validationResults)
+                              ? validationResults.Select(static c => c.ErrorMessage ?? "Error")
+                              : null;
+    }
+
+    private static bool ValidateProperty<T>(object? value, T instance, string propertyName, out ICollection<ValidationResult> results)
+    {
+        if (instance is null)
+        {
+            throw new ArgumentNullException(nameof(instance));
+        }
+
+        results = new List<ValidationResult>();
+
+        return Validator.TryValidateProperty(value, new ValidationContext(instance)
+            {
+                MemberName = propertyName,
+            }, results);
+    }
+
+    private void ValidateUsername()
+    {
+        _usernameErrors = !ValidateProperty(_username, LoginDTO, "Username", out ICollection<ValidationResult> validationResults)
+                              ? validationResults.Select(static c => c.ErrorMessage ?? "Error")
+                              : null;
+    }
+}
