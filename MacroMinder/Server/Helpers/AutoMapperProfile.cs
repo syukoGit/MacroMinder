@@ -4,6 +4,7 @@ using AutoMapper;
 using JetBrains.Annotations;
 using MacroMinder.Server.Entities;
 using MacroMinder.Shared.Food;
+using MacroMinder.Shared.User;
 
 public class AutoMapperProfile : Profile
 {
@@ -12,5 +13,8 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Food, FoodDTO>();
         CreateMap<CreateFoodDTO, Food>();
+
+        CreateMap<User, UserDTO>();
+        CreateMap<UserPatchUpdateDTO, User>();
     }
 }
