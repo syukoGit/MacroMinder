@@ -24,9 +24,9 @@ public class FoodsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<FoodDTO>> Get(string username)
+    public async Task<ActionResult<IEnumerable<FoodDTO>>> Get(string username)
     {
-        User? user = _database.Users.AsNoTracking().FirstOrDefault(c => c.UserName == username);
+        User? user = await _database.Users.Include(static c => c.Foods).AsNoTracking().FirstOrDefaultAsync(c => c.UserName == username);
 
         return user == null
                    ? NotFound("User not found")
@@ -34,9 +34,9 @@ public class FoodsController : ControllerBase
     }
 
     [HttpGet("{foodId:int}")]
-    public ActionResult<FoodDTO> Get(string username, int foodId)
+    public async Task<ActionResult<FoodDTO>> Get(string username, int foodId)
     {
-        User? user = _database.Users.AsNoTracking().FirstOrDefault(c => c.UserName == username);
+        User? user = await _database.Users.Include(static c => c.Foods).AsNoTracking().FirstOrDefaultAsync(c => c.UserName == username);
 
         if (user == null)
         {
