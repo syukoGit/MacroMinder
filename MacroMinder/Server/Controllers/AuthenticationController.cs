@@ -67,10 +67,10 @@ public class AuthenticationController : ControllerBase
             UserName = model.Username,
             Objective = new MacroNutriment
             {
-                Calories = 300,
-                Carbohydrates = 45,
-                Proteins = 70,
-                Lipids = 35,
+                Calories = 3119,
+                Carbohydrates = 416,
+                Proteins = 114,
+                Lipids = 111,
             },
         };
 

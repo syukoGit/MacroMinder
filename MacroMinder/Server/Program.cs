@@ -12,11 +12,16 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+    app.UseSwagger();
+    app.UseSwaggerUI(static c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MacroMinder.API v1"));
 }
 else
 {

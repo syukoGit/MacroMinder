@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Route("api/users/{username}/foods")]
+[Route("api/users/{username}/[Controller]")]
 [ApiController]
 [Authorize]
 public class FoodsController : ControllerBase
@@ -71,7 +71,7 @@ public class FoodsController : ControllerBase
 
         return CreatedAtAction("Get", new
         {
-            username = user.Id,
+            username = user.UserName,
             foodId = food.Id,
         }, foodDTO);
     }
