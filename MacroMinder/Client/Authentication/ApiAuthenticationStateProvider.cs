@@ -35,11 +35,11 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         return new AuthenticationState(claims);
     }
 
-    public void MarkUserAsAuthenticated(string email)
+    public void MarkUserAsAuthenticated(string username)
     {
         Claim[] claims =
         {
-            new (ClaimTypes.Name, email),
+            new (ClaimTypes.Name, username),
         };
 
         ClaimsIdentity claimsIdentity = new (claims, "apiAuth");

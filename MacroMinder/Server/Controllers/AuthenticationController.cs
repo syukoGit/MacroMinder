@@ -65,6 +65,13 @@ public class AuthenticationController : ControllerBase
         User newUser = new ()
         {
             UserName = model.Username,
+            Objective = new MacroNutriment
+            {
+                Calories = 300,
+                Carbohydrates = 45,
+                Proteins = 70,
+                Lipids = 35,
+            },
         };
 
         IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);

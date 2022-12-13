@@ -4,7 +4,8 @@
     <Authorized>
         <div class="authorized">
             <a>Hello, @(context.User.Identity?.Name ?? "unknown name")</a>
-            <button @onclick="BeginLogOut">Log out</button>
+            <a href="my-profile">My Profile</a>
+            <a href="authentication/logout">Log out</a>
         </div>
     </Authorized>
     <NotAuthorized>

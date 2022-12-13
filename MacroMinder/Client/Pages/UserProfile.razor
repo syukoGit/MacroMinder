@@ -1,0 +1,67 @@
+﻿@page "/my-profile"
+
+@using Blazored.LocalStorage
+@using MacroMinder.Shared.User
+@using System.Net.Http.Headers
+@using Microsoft.AspNetCore.Authorization
+
+@inject HttpClient Http
+@inject ILocalStorageService LocalStorage
+
+@attribute [Authorize]
+
+@if (_user != null)
+{
+    <h1>@_user.Username</h1>
+    @if (_user.Objective != null)
+    {
+        <h3>Objective: </h3>
+        <ul>
+            <li>Calories: @_user.Objective.Calories</li>
+            <li>Carbohydrates: @_user.Objective.Carbohydrates</li>
+            <li>Lipids: @_user.Objective.Lipids</li>
+            <li>Proteins: @_user.Objective.Proteins</li>
+        </ul>
+    }
+}
+else
+{
+    <p>retrieving...</p>
+}
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    private UserDTO? _user;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthenticationStateTask == null)
+        {
+            return;
+        }
+
+        AuthenticationState authenticationState = await AuthenticationStateTask;
+        string? username = authenticationState.User.Identity?.Name;
+
+        if (string.IsNullOrEmpty(username))
+        {
+            return;
+        }
+
+        var token = await LocalStorage.GetItemAsync<string>("authToken");
+
+        if (token == null)
+        {
+            return;
+        }
+
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+
+        _user = await Http.GetFromJsonAsync<UserDTO>($"/api/Users/{username}");
+    }
+
+}

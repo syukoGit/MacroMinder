@@ -4,6 +4,7 @@ using MacroMinder.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MacroMinder.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221213135550_CreateMacroNutriment")]
+    partial class CreateMacroNutriment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,9 +119,6 @@ namespace MacroMinder.Server.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("ObjectiveId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -147,8 +147,6 @@ namespace MacroMinder.Server.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ObjectiveId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -303,15 +301,6 @@ namespace MacroMinder.Server.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("MacroNutriment");
-                });
-
-            modelBuilder.Entity("MacroMinder.Server.Entities.User", b =>
-                {
-                    b.HasOne("MacroMinder.Server.Entities.MacroNutriment", "Objective")
-                        .WithMany()
-                        .HasForeignKey("ObjectiveId");
-
-                    b.Navigation("Objective");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

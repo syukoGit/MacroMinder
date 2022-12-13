@@ -14,7 +14,7 @@ public class ApplicationDbContext : IdentityDbContext<User>
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<User>().Navigation(static c => c.Foods).AutoInclude();
+        builder.Entity<User>().Navigation(static c => c.Objective).AutoInclude();
 
         base.OnModelCreating(builder);
     }
